@@ -11,8 +11,6 @@ class DetailsScreen extends StatelessWidget {
 
 class _DetailsView extends StatelessWidget {
   
-  
-
   @override
   Widget build(BuildContext context) {
     return Placeholder();

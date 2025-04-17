@@ -13,6 +13,19 @@ class _DetailsView extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Details'),
+      ),
+
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Details block'),
+          ],
+        ),
+      ),
+    );
   }
 }

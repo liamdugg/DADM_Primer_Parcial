@@ -29,29 +29,43 @@ class _LoginScreenState extends State<LoginScreen> {
             
             const SizedBox(height: 20),
             _PasswordFieldView(),
-
-            const SizedBox(height: 20),
             
-            ElevatedButton(
-              onPressed: () {
-                if(loginFormKey.currentState!.validate()){
-                  context.push('/home');
-                }
-                else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: 
-                      Text('email or password incorrect'))
-                  );
-                }
-              },
-              child: const Text('Login'),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15.0,
+                vertical: 20.0
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    child: const Text('Sign Up'),
+                    onPressed: (){}, 
+                  ),
+                  
+                  FilledButton(
+                    onPressed: () {
+                      if(loginFormKey.currentState!.validate()){
+                        context.push('/home');
+                      }
+                      else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: const Text('email or password incorrect')
+                          ),
+                        );
+                      }
+                    },
+                    child: const Text('Filled'),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
     );
   }
-
 }
 
 /* ------------ UserFieldView ------------ */

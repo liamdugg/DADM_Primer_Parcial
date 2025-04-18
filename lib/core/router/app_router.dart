@@ -3,12 +3,12 @@ import 'package:primer_parcial/presentation/screens/home_screen.dart';
 import 'package:primer_parcial/presentation/screens/edit_screen.dart';
 import 'package:primer_parcial/presentation/screens/login_screen.dart';
 import 'package:primer_parcial/presentation/screens/details_screen.dart';
+import 'package:primer_parcial/presentation/screens/profile_screen.dart';
 import 'package:primer_parcial/presentation/screens/settings_screen.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/login',
+  initialLocation: '/home',
   routes: [
-
     GoRoute(
       path: '/login',
       builder:(context, state) => const LoginScreen(),
@@ -32,6 +32,11 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/home/editor/:id',
       builder:(context, state) => const EditScreen(),
+    ),
+
+    GoRoute(
+      path: '/profile/:id',
+      builder:(context, state) => const ProfileScreen(),
     ),
   ],
 );

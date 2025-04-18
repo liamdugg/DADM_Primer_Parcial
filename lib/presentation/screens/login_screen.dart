@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             
-            const SizedBox(height: 20,),
+            const SizedBox(height: 20),
             _UserFieldView(),
             
             const SizedBox(height: 20),
@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         );
                       }
                     },
-                    child: const Text('Filled'),
+                    child: const Text('Login'),
                   ),
                 ],
               ),

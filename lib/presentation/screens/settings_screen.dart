@@ -10,11 +10,13 @@ class SettingsScreen extends StatelessWidget {
         title: const Text('Settings'),
       ),
       
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text('Settings block'),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Settings block'),
+          ],
+        ),
       ),
     );
   }

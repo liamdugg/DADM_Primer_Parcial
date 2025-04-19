@@ -12,8 +12,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   
   final loginFormKey = GlobalKey<FormState>();
-  //final TextEditingController userController = TextEditingController();
-  //final TextEditingController passController = TextEditingController();
+  final TextEditingController userController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +25,14 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             
             const SizedBox(height: 20),
-            _UserFieldView(),
+            _UserFieldView(
+              controller: userController,
+            ),
             
             const SizedBox(height: 20),
-            _PasswordFieldView(),
+            _PasswordFieldView(
+              controller: passController,
+            ),
             
             Padding(
               padding: const EdgeInsets.symmetric(
@@ -38,25 +42,34 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  
                   TextButton(
                     child: const Text('Sign Up'),
                     onPressed: (){}, 
                   ),
                   
+                  Padding(padding: const EdgeInsets.symmetric(horizontal: 1)),
+                  
                   FilledButton(
+                    child: const Text('Login'),
                     onPressed: () {
                       if(loginFormKey.currentState!.validate()){
-                        context.push('/home');
-                      }
-                      else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: const Text('email or password incorrect')
-                          ),
+                        final user = userList.firstWhere(
+                          (user) => (user.email == userController.text) && (user.password == passController.text),
+                          orElse: () => User(email:'', password:''),
                         );
+                        
+                        if (user.email.isNotEmpty && user.password.isNotEmpty){
+                          context.go('/home/${user.email}');
+                        }
+
+                        else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: const Text('Invalid credentials')),
+                          );
+                        }
                       }
                     },
-                    child: const Text('Login'),
                   ),
                 ],
               ),
@@ -71,24 +84,28 @@ class _LoginScreenState extends State<LoginScreen> {
 /* ------------ UserFieldView ------------ */
 
 class _UserFieldView extends StatefulWidget {
+
+  final TextEditingController controller;
+  const _UserFieldView({
+    required this.controller
+  });
+
   @override
   State<_UserFieldView> createState() => _UserFieldViewState();
 }
 
 class _UserFieldViewState extends State<_UserFieldView> {
   
-  final TextEditingController controller = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Padding( 
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: TextFormField(
-        controller: controller,
+        controller: widget.controller,
         validator: validateUser,
         decoration: const InputDecoration(
           labelText: 'Username',
-          hintText: 'Enter your username',
+          hintText: 'Username',
           border: OutlineInputBorder(),
           icon: Icon(Icons.person),
         ),
@@ -97,38 +114,40 @@ class _UserFieldViewState extends State<_UserFieldView> {
   }
 
   String? validateUser (String? value) {
+    
     if (value == null || value.isEmpty) {
-      return 'Please enter your email';
+      return 'Username is required';
+    }
+    
+    else if (value.isNotEmpty && value.length > 3) {
+      return null;
     }
 
-    else if (value.isNotEmpty) {
-      for(var user in userList) {
-        if(user.email == value) {
-          return null;
-        }
-      }
-    }
-
-    return 'Please enter a valid email';
+    return 'Invalid username';
   }
 }
 
 /* ------------ PasswordFieldView ------------ */
 
 class _PasswordFieldView extends StatefulWidget {
+  
+  final TextEditingController controller;
+  const _PasswordFieldView({
+    required this.controller
+  });
+
   @override
   State<_PasswordFieldView> createState() => _PasswordFieldViewState();
 }
 
 class _PasswordFieldViewState extends State<_PasswordFieldView> {
-  TextEditingController controller = TextEditingController();
-
+ 
   @override
   Widget build(BuildContext context) {
     return Padding( 
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: TextFormField(
-        controller: controller,
+        controller: widget.controller,
         validator: validatePassword,
         decoration: const InputDecoration(
           labelText: 'Password',
@@ -141,16 +160,12 @@ class _PasswordFieldViewState extends State<_PasswordFieldView> {
   }
 
   String? validatePassword (String? value) {
+    
     if (value == null || value.isEmpty) {
-      return 'Please enter your password';
+      return 'Password is required';
     }
-
-    else if (value.isNotEmpty) {
-      for (var user in userList) {
-        if (controller.text == user.password) {
-          return null;
-        }
-      }
+    else if (value.isNotEmpty && value.length > 3) {
+      return null;
     }
     return 'Invalid password';
   }

@@ -7,7 +7,7 @@ import 'package:primer_parcial/presentation/screens/profile_screen.dart';
 import 'package:primer_parcial/presentation/screens/settings_screen.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/home',
+  initialLocation: '/login',
   routes: [
     GoRoute(
       path: '/login',
@@ -15,8 +15,10 @@ final appRouter = GoRouter(
     ),
 
     GoRoute(
-      path: '/home',
-      builder:(context, state) => const HomeScreen(),
+      path: '/home/:id',
+      builder:(context, state) => HomeScreen(
+        userName: state.pathParameters['id']!.toString(),
+      ),
     ),
     
     GoRoute(

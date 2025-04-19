@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  
+  final String userName;
+  
+  const HomeScreen({
+    super.key,
+    required this.userName
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -12,14 +18,20 @@ class HomeScreen extends StatelessWidget {
       ),
 
       body: _ItemListView(),
-      drawer: _DrawerView(),
+      drawer: _DrawerView(
+        userName: userName,
+      ),
 
     );
   }
 }
 
 class _DrawerView extends StatelessWidget {
-
+  
+  final String userName;
+  
+  const _DrawerView({required this.userName});
+  
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -31,10 +43,13 @@ class _DrawerView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ClipOval(
-                  child: Image.network('https://www.w3schools.com/howto/img_avatar.png')
+                  child: Image.network('https://www.w3schools.com/howto/img_avatar.png',
+                    height: 80,
+                    width: 80,
+                  ), 
                 ),
                 const SizedBox(height: 20,),
-                const Text('Liam Duggan'),
+                Text(userName),
               ],
             ),
           ),
@@ -61,6 +76,7 @@ class _DrawerView extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),
+            onTap: () => context.go('/login'),
           ),
         ],
       ),

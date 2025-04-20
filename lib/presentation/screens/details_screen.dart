@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:primer_parcial/presentation/widgets/custom_drawer.dart';
+
 
 class DetailsScreen extends StatelessWidget {
   const DetailsScreen({super.key});
@@ -17,7 +19,11 @@ class _DetailsView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Details'),
       ),
-
+      
+      drawer: CustomDrawer(
+        userName: 'liam'
+      ),
+      
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

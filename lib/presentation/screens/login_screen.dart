@@ -48,7 +48,6 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  
                   TextButton(
                     onPressed: (){}, 
                     child: const Text('Sign Up'),
@@ -62,8 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
               ],),
             ),
-          ],
-        ),
+        ],),
       ),
     );
   }

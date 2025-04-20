@@ -22,7 +22,7 @@ final appRouter = GoRouter(
     ),
     
     GoRoute(
-      path: '/home/:id',
+      path: '/home/details/:id',
       builder:(context, state) => const DetailsScreen(),
     ),
     

@@ -24,90 +24,45 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             
-            const SizedBox(height: 20),
-            _UserFieldView(
+            _CustomFormField(
+              labelText: 'Username',
+              icon: Icon(Icons.person), 
+              validator: validateUser, 
               controller: userController,
             ),
             
             const SizedBox(height: 20),
-            _PasswordFieldView(
+            
+            _CustomFormField(
+              labelText: 'Password',
+              icon: Icon(Icons.lock),  
+              validator: validatePassword, 
               controller: passController,
+              isPassword: true,
             ),
             
+            const SizedBox(height: 20),
+            
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 15.0,
-                vertical: 20.0
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   
                   TextButton(
-                    child: const Text('Sign Up'),
                     onPressed: (){}, 
+                    child: const Text('Sign Up'),
                   ),
                   
                   Padding(padding: const EdgeInsets.symmetric(horizontal: 1)),
                   
                   FilledButton(
+                    onPressed: onLoginButtonPressed,
                     child: const Text('Login'),
-                    onPressed: () {
-                      if(loginFormKey.currentState!.validate()){
-                        final user = userList.firstWhere(
-                          (user) => (user.email == userController.text) && (user.password == passController.text),
-                          orElse: () => User(email:'', password:''),
-                        );
-                        
-                        if (user.email.isNotEmpty && user.password.isNotEmpty){
-                          context.go('/home/${user.email}');
-                        }
-
-                        else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: const Text('Invalid credentials')),
-                          );
-                        }
-                      }
-                    },
                   ),
-                ],
-              ),
+              ],),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-/* ------------ UserFieldView ------------ */
-
-class _UserFieldView extends StatefulWidget {
-
-  final TextEditingController controller;
-  const _UserFieldView({
-    required this.controller
-  });
-
-  @override
-  State<_UserFieldView> createState() => _UserFieldViewState();
-}
-
-class _UserFieldViewState extends State<_UserFieldView> {
-  
-  @override
-  Widget build(BuildContext context) {
-    return Padding( 
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      child: TextFormField(
-        controller: widget.controller,
-        validator: validateUser,
-        decoration: const InputDecoration(
-          labelText: 'Username',
-          hintText: 'Username',
-          border: OutlineInputBorder(),
-          icon: Icon(Icons.person),
         ),
       ),
     );
@@ -118,49 +73,14 @@ class _UserFieldViewState extends State<_UserFieldView> {
     if (value == null || value.isEmpty) {
       return 'Username is required';
     }
-    
     else if (value.isNotEmpty && value.length > 3) {
       return null;
     }
-
     return 'Invalid username';
-  }
-}
-
-/* ------------ PasswordFieldView ------------ */
-
-class _PasswordFieldView extends StatefulWidget {
-  
-  final TextEditingController controller;
-  const _PasswordFieldView({
-    required this.controller
-  });
-
-  @override
-  State<_PasswordFieldView> createState() => _PasswordFieldViewState();
-}
-
-class _PasswordFieldViewState extends State<_PasswordFieldView> {
- 
-  @override
-  Widget build(BuildContext context) {
-    return Padding( 
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      child: TextFormField(
-        controller: widget.controller,
-        validator: validatePassword,
-        decoration: const InputDecoration(
-          labelText: 'Password',
-          hintText: 'Enter your password',
-          border: OutlineInputBorder(),
-          icon: Icon(Icons.lock),
-        ),
-      ),
-    );
   }
 
   String? validatePassword (String? value) {
-    
+
     if (value == null || value.isEmpty) {
       return 'Password is required';
     }
@@ -168,5 +88,75 @@ class _PasswordFieldViewState extends State<_PasswordFieldView> {
       return null;
     }
     return 'Invalid password';
+  }
+
+  void onLoginButtonPressed() {
+    
+    if(loginFormKey.currentState!.validate()){
+      final user = userList.firstWhere(
+        (user) => (user.email == userController.text) && (user.password == passController.text),
+        orElse: () => User(email:'', password:''),
+      );
+      
+      if (user.email.isNotEmpty && user.password.isNotEmpty){
+        context.go('/home/${user.email}');
+      }
+
+      else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: const Text('Invalid credentials')),
+        );
+      }
+    }
+  }
+}
+
+class _CustomFormField extends StatefulWidget {
+  
+  final bool isPassword;
+  final String labelText;
+  final String? Function(String?) validator;
+  final TextEditingController controller;
+  final Icon icon;
+  
+  const _CustomFormField({
+    required this.labelText,
+    required this.validator,
+    required this.controller,
+    required this.icon,
+    this.isPassword = false,
+  });
+
+  @override
+  State<_CustomFormField> createState() => _CustomFormFieldState();
+}
+
+class _CustomFormFieldState extends State<_CustomFormField> {
+  
+  bool toggle = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding( 
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: TextFormField(
+        controller: widget.controller,
+        validator : widget.validator,
+        obscureText: widget.isPassword ? toggle : false,
+        
+        decoration: InputDecoration(
+          labelText: widget.labelText,
+          hintText:  widget.labelText,
+          border: OutlineInputBorder(),
+          prefixIcon: widget.icon,
+          suffixIcon: widget.isPassword 
+            ? IconButton(
+              icon: toggle ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+              onPressed: () => setState(() {toggle = !toggle;})
+            ) 
+            : null,
+        ),
+      ),
+    );
   }
 }

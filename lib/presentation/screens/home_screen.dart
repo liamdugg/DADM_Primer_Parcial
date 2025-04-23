@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:primer_parcial/domain/album.dart';
 import 'package:primer_parcial/presentation/widgets/custom_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -31,27 +32,51 @@ class HomeScreen extends StatelessWidget {
 
 class _ItemListView extends StatelessWidget {
   
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 10,
+      itemCount: albumList.length,
       itemBuilder: (context, index){
-        return _ItemView();
+        return _ItemView(
+          album: albumList[index]
+        );
       }
     );
   }
 }
 
 class _ItemView extends StatelessWidget {
+
+  final Album album;
+
+  const _ItemView({required this.album});
   
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Image.network('https://www.actron.com.tw/uploads/images/product/wafer/gallery/bare_die.jpg'),
-      title: Text('Element'),
-      subtitle: Text('Subtitle'),
-      trailing: Icon(Icons.arrow_forward),
-      onTap: () => context.push('/home/details/a'),
+    final textStyle = Theme.of(context).textTheme;
+
+    return Card(
+      child: ListTile(
+        leading: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: SizedBox(
+            width: 60,
+            height: 60,
+            child: Image.asset(album.cover!, fit: BoxFit.cover,),
+          ),
+        ),
+        title: Text(album.title, style: textStyle.titleMedium,),
+        subtitle: Text(album.artist, style: textStyle.bodyMedium),
+        trailing: Icon(Icons.arrow_forward),
+        onTap: () => context.push('/home/details/a'),
+      ),
     );
   }
 }
+
+/*SizedBox(
+            width: 50,
+            height: 50,
+            child: Image.asset(album.cover!, fit: BoxFit.fill,),
+          ), */

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-//import 'package:primer_parcial/core/router/app_router.dart';
 import 'package:go_router/go_router.dart';
+
+// TODO: fix drawer appearing on back arrow tapped instead of going to previous screen.
 
 class CustomDrawer extends StatelessWidget {
   
@@ -77,8 +78,8 @@ class _CustomDrawerHeader extends StatelessWidget {
         children: [
           ClipOval(
             child: Image.network('https://www.w3schools.com/howto/img_avatar.png',
-              height: 80,
-              width: 80,
+              height: 90,
+              width: 90,
             ), 
           ),
           const SizedBox(height: 20,),

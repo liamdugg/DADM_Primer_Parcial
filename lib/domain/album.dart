@@ -88,4 +88,26 @@ final List<Album> albumList = [
     genre: [Genre.jazz],
     cover: 'assets/bluetrain.jpg',
   ),
+  Album(
+    title: 'Abbey Road',
+    artist: 'The Beatles',
+    releaseYear: 1969,
+    genre: [Genre.rock, Genre.pop],
+    cover: 'assets/abbey_road.jpg',
+  ),
+  
+  Album(
+    title: 'Blue Train',
+    artist: 'John Coltrane',
+    releaseYear: 1957,
+    genre: [Genre.jazz],
+    cover: 'assets/bluetrain.jpg',
+  ),
+  Album(
+    title: 'The Eminem Show',
+    artist: 'Eminem',
+    releaseYear: 2002,
+    genre: [Genre.rap],
+    cover: 'assets/the_eminem_show.jpg',
+  ),
 ];

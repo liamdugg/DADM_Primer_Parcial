@@ -26,20 +26,24 @@ class HomeScreen extends StatelessWidget {
 
       body: _ItemListView(),
 
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.push('/home/edit/add'),
+        child: const Icon(Icons.add),
+      ),
+
     );
   }
 }
 
 class _ItemListView extends StatelessWidget {
   
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: albumList.length,
       itemBuilder: (context, index){
         return _ItemView(
-          album: albumList[index]
+          album: albumList[index],
         );
       }
     );
@@ -57,6 +61,7 @@ class _ItemView extends StatelessWidget {
     final textStyle = Theme.of(context).textTheme;
 
     return Card(
+      elevation: 2,
       child: ListTile(
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(8),
@@ -69,14 +74,9 @@ class _ItemView extends StatelessWidget {
         title: Text(album.title, style: textStyle.titleMedium,),
         subtitle: Text(album.artist, style: textStyle.bodyMedium),
         trailing: Icon(Icons.arrow_forward),
-        onTap: () => context.push('/home/details/a'),
+        
+        onTap: () => context.push('/home/details/${album.title}'),
       ),
     );
   }
 }
-
-/*SizedBox(
-            width: 50,
-            height: 50,
-            child: Image.asset(album.cover!, fit: BoxFit.fill,),
-          ), */

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:primer_parcial/presentation/providers/user_provider.dart';
 import 'package:primer_parcial/presentation/widgets/custom_drawer.dart';
 
-class AddAlbumScreen extends StatelessWidget {
+class AddAlbumScreen extends ConsumerWidget {
   const AddAlbumScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       
       appBar: AppBar(
@@ -13,7 +15,7 @@ class AddAlbumScreen extends StatelessWidget {
       ),
       
       drawer: CustomDrawer(
-        userName: 'liam'
+        userName: ref.read(loggedUserProvider).username,
       ),
       
       body: Center(

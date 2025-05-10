@@ -1,17 +1,29 @@
 class User {
-  String email;
+  String username;
   String password;
+  String email;
+  String phone;
+  String city;
+  String country;
 
   User({
-    required this.email,
+    required this.username,
     required this.password,
+    required this.email,
+    required this.phone,
+    required this.city,
+    required this.country,
   });
 }
 
-List<User> userList = [
-    User(email: 'liam' , password: 'liam1'),
-    User(email: 'liam2', password: 'liam2'),
-    User(email: 'liam3', password: 'liam3'),
-    User(email: 'liam4', password: 'liam4'),
-    User(email: 'liam5', password: 'liam5'),
-];
+final List<User> userList = List.generate(10, (index) {
+  final i = index + 1; // Start from 1
+  return User(
+    username: 'liam$i',
+    password: 'contraseña', // Same password
+    email   : 'liam$i@gmail.com',
+    phone   : '15-6264-5759}',
+    city    : 'City$i',
+    country : 'Country$i',
+  );
+});

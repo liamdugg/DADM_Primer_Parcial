@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:primer_parcial/domain/user.dart';
+import 'package:primer_parcial/presentation/providers/form_field_provider.dart';
+import 'package:primer_parcial/presentation/providers/user_provider.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends ConsumerWidget {
+  LoginScreen({super.key});
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  
   final loginFormKey = GlobalKey<FormState>();
   final TextEditingController userController = TextEditingController();
   final TextEditingController passController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: Form(
         key: loginFormKey,
@@ -30,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
               validator: validateUser, 
               controller: userController,
             ),
-            
+
             const SizedBox(height: 20),
             
             _CustomFormField(
@@ -41,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
               isPassword: true,
             ),
             
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
@@ -56,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Padding(padding: const EdgeInsets.symmetric(horizontal: 1)),
                   
                   FilledButton(
-                    onPressed: onLoginButtonPressed,
+                    onPressed: () => onLoginButtonPressed(context, ref),
                     child: const Text('Login'),
                   ),
               ],),
@@ -71,6 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (value == null || value.isEmpty) {
       return 'Username is required';
     }
+
     else if (value.isNotEmpty && value.length > 3) {
       return null;
     }
@@ -88,18 +86,19 @@ class _LoginScreenState extends State<LoginScreen> {
     return 'Invalid password';
   }
 
-  void onLoginButtonPressed() {
+  void onLoginButtonPressed(BuildContext context, WidgetRef ref) {
     
     if(loginFormKey.currentState!.validate()){
       final user = userList.firstWhere(
-        (user) => (user.email == userController.text) && (user.password == passController.text),
-        orElse: () => User(email:'', password:''),
+        (user) => (user.username == userController.text) && (user.password == passController.text),
+        orElse: () => User(username:'', password:'', email:'', phone:'', city:'', country:''),
       );
       
-      if (user.email.isNotEmpty && user.password.isNotEmpty){
-        context.go('/home/${user.email}');
+      if (user.username.isNotEmpty && user.password.isNotEmpty){
+        ref.read(loggedUserProvider.notifier).setUser(user.username, user.password);
+        context.go('/home/${user.username}');
       }
-
+    
       else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: const Text('Invalid credentials')),
@@ -109,6 +108,52 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
+class _CustomFormField extends ConsumerWidget {
+  
+  final bool isPassword;
+  final String labelText;
+  final String? Function(String?) validator;
+  final TextEditingController controller;
+  final Icon icon;
+  
+  const _CustomFormField({
+    required this.labelText,
+    required this.validator,
+    required this.controller,
+    required this.icon,
+    this.isPassword = false,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    final bool toggle = ref.watch(formFieldProvider);
+
+    return Padding( 
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child  : TextFormField(
+        controller  : controller,
+        validator   : validator,
+        obscureText : isPassword ? toggle : false,
+        
+        decoration: InputDecoration(
+          labelText  : labelText,
+          hintText   : labelText,
+          border     : OutlineInputBorder(),
+          prefixIcon : icon,
+          suffixIcon : isPassword 
+            ? IconButton(
+              icon: toggle ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+              onPressed: () => ref.read(formFieldProvider.notifier).state = !toggle,
+            ) 
+            : null,
+        ),
+      ),
+    );
+  }
+}
+
+/*
 class _CustomFormField extends StatefulWidget {
   
   final bool isPassword;
@@ -138,8 +183,8 @@ class _CustomFormFieldState extends State<_CustomFormField> {
     return Padding( 
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: TextFormField(
-        controller: widget.controller,
-        validator : widget.validator,
+        controller : widget.controller,
+        validator  : widget.validator,
         obscureText: widget.isPassword ? toggle : false,
         
         decoration: InputDecoration(
@@ -158,3 +203,4 @@ class _CustomFormFieldState extends State<_CustomFormField> {
     );
   }
 }
+*/

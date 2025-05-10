@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:primer_parcial/domain/album.dart';
+import 'package:primer_parcial/presentation/providers/user_provider.dart';
 import 'package:primer_parcial/presentation/widgets/custom_drawer.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   
   final String userName;
   
@@ -13,7 +15,7 @@ class HomeScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       
       appBar: AppBar(
@@ -21,7 +23,7 @@ class HomeScreen extends StatelessWidget {
       ),
 
       drawer: CustomDrawer(
-        userName: userName,
+        userName: ref.read(loggedUserProvider).username,
       ),
 
       body: _ItemListView(),

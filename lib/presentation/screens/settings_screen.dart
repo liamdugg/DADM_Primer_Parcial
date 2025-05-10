@@ -32,7 +32,8 @@ class _SettingsView extends ConsumerWidget {
     
     return Column(
       children: [
-
+        
+        // Dark Mode Toggle
         SwitchListTile(
           title     : const Text('Dark Mode'),
           subtitle  : const Text('Enable dark mode'),
@@ -41,18 +42,22 @@ class _SettingsView extends ConsumerWidget {
           onChanged : (value) => ref.read(themeProvider.notifier).toggleDarkMode(),
         ),
 
+        // Accent Color Selection
         ExpansionTile(
           title    : const Text('Accent Color'),
           subtitle : const Text('Change accent color'),
           leading  : const Icon(Icons.color_lens),
           initiallyExpanded: true,
-          children : colors.map((color) {
+          children : colorList.asMap().entries.map((entry) {
+            final int index = entry.key;
+            final MyColor color = entry.value;
+
             return RadioListTile(
-              title: Text(color.toARGB32().toString()),
-              value: colors.indexOf(color),
+              title: Text(color.name),
+              value: index,
               groupValue: ref.watch(themeProvider).selectedColor,
               onChanged: (value) => 
-                ref.watch(themeProvider.notifier).changeColorTheme(colors.indexOf(color)),
+                ref.read(themeProvider.notifier).changeColorTheme(value!),
             );
           }).toList(),
         ),

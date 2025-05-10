@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:primer_parcial/domain/user.dart';
+//import 'package:primer_parcial/domain/user.dart';
 import 'package:primer_parcial/domain/album.dart';
 import 'package:primer_parcial/presentation/widgets/custom_drawer.dart';
 
@@ -22,10 +22,13 @@ class DetailsScreen extends StatelessWidget {
         userName: 'liam'
       ),
       
-      body: _DetailsView(
-        album: album
+      body: PageView(
+        children: [
+          _DetailsView(album: album),
+          _TrackListView(),
+          Center(child: Text('Third Page')),
+        ],
       ),
-
     );
   }
 }
@@ -44,15 +47,75 @@ class _DetailsView extends StatelessWidget {
           Image.asset(album.cover!),
           const SizedBox(height: 20),
 
-          Text(
-            album.title, 
-            style: Theme.of(context).textTheme.titleMedium,
+          Card(
+            elevation: 2,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.album),
+                    Padding(padding: const EdgeInsets.only(right: 10)),
+                    Text('Album: ${album.title}', style: Theme.of(context).textTheme.bodyLarge),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.person),
+                    Padding(padding: const EdgeInsets.only(right: 10)),
+                    Text('Artist: ${album.artist}', style: Theme.of(context).textTheme.bodyLarge),
+                  ],
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+}
 
-          Text(
-            album.artist, 
-            style: Theme.of(context).textTheme.bodyMedium,
+class _TrackListView extends StatelessWidget {
+  //const _TrackListView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Table(
+
+        children: [
+          TableRow(
+            children: [
+              Text('#'),
+              Icon(Icons.music_note),
+              Icon(Icons.timer_outlined),
+            ],
+          ),
+
+          TableRow(
+            children: [
+              Text('1'),
+              Text('Track 1'),
+              Text('3:45'),
+            ],
+          ),
+
+          TableRow(
+            children: [
+              Text('2'),
+              Text('Track 2'),
+              Text('4:20'),
+            ],
+          ),
+          
+          TableRow(
+            children: [
+              Text('3'),
+              Text('Track 3'),
+              Text('2:50'),
+            ],
           ),
         ],
       ),

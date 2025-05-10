@@ -65,9 +65,7 @@ class _ItemView extends StatelessWidget {
       child: ListTile(
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(8),
-          child: SizedBox(
-            width: 60,
-            height: 60,
+          child: SizedBox(width: 60, height: 60,
             child: Image.asset(album.cover!, fit: BoxFit.cover,),
           ),
         ),

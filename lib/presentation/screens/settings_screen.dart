@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:primer_parcial/core/theme/app_theme.dart';
 import 'package:primer_parcial/core/theme/app_theme_provider.dart';
 import 'package:primer_parcial/presentation/widgets/custom_drawer.dart';
 
@@ -29,7 +30,7 @@ class _SettingsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     
-    return ListView(
+    return Column(
       children: [
 
         SwitchListTile(
@@ -40,12 +41,21 @@ class _SettingsView extends ConsumerWidget {
           onChanged : (value) => ref.read(themeProvider.notifier).toggleDarkMode(),
         ),
 
-        ListTile(
+        ExpansionTile(
           title    : const Text('Accent Color'),
           subtitle : const Text('Change accent color'),
           leading  : const Icon(Icons.color_lens),
+          initiallyExpanded: true,
+          children : colors.map((color) {
+            return RadioListTile(
+              title: Text(color.toARGB32().toString()),
+              value: colors.indexOf(color),
+              groupValue: ref.watch(themeProvider).selectedColor,
+              onChanged: (value) => 
+                ref.watch(themeProvider.notifier).changeColorTheme(colors.indexOf(color)),
+            );
+          }).toList(),
         ),
-
       ],
     );
   }

@@ -6,10 +6,12 @@ import 'package:go_router/go_router.dart';
 class CustomDrawer extends StatelessWidget {
   
   final String userName;
+  final String image;
   
   const CustomDrawer({
     super.key,
     required this.userName,
+    required this.image,
   });
 
   @override
@@ -24,6 +26,7 @@ class CustomDrawer extends StatelessWidget {
           
           _CustomDrawerHeader(
             userName: userName,
+            image: image,
           ),
 
           // Home Button
@@ -65,9 +68,11 @@ class CustomDrawer extends StatelessWidget {
 class _CustomDrawerHeader extends StatelessWidget {
   
   final String userName;
+  final String image;
 
   const _CustomDrawerHeader({
     required this.userName,
+    required this.image,
   });
 
   @override
@@ -77,7 +82,8 @@ class _CustomDrawerHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ClipOval(
-            child: Image.network('https://www.w3schools.com/howto/img_avatar.png',
+            child: Image.asset(image,
+              fit: BoxFit.cover,
               height: 90,
               width: 90,
             ), 

@@ -91,11 +91,11 @@ class LoginScreen extends ConsumerWidget {
     if(loginFormKey.currentState!.validate()){
       final user = userList.firstWhere(
         (user) => (user.username == userController.text) && (user.password == passController.text),
-        orElse: () => User(username:'', password:'', email:'', phone:'', city:'', country:''),
+        orElse: () => User(username:'', password:'', email:'', phone:'', city:'', country:'', profileImage: ''),
       );
       
       if (user.username.isNotEmpty && user.password.isNotEmpty){
-        ref.read(loggedUserProvider.notifier).setUser(user.username, user.password);
+        ref.read(loggedUserProvider.notifier).setUser(user);
         context.go('/home/${user.username}');
       }
     

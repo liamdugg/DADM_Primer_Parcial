@@ -15,7 +15,8 @@ class EditScreen extends ConsumerWidget {
       ),
       
       drawer: CustomDrawer(
-        userName: ref.read(loggedUserProvider).username
+        userName: ref.read(loggedUserProvider).username,
+        image   : ref.read(loggedUserProvider).profileImage,
       ),
 
       body: Column(

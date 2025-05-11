@@ -24,6 +24,7 @@ class HomeScreen extends ConsumerWidget {
 
       drawer: CustomDrawer(
         userName: ref.read(loggedUserProvider).username,
+        image   : ref.read(loggedUserProvider).profileImage,
       ),
 
       body: _ItemListView(),

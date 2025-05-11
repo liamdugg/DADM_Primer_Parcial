@@ -5,16 +5,23 @@ final loggedUserProvider = StateNotifierProvider<ThemeNotifier, User>((ref) => T
 
 class ThemeNotifier extends StateNotifier<User> {
 
-  ThemeNotifier() : super(User(username:'', password:'', email:'', phone:'', city:'', country:''));
+  ThemeNotifier() : super(
+    User(
+      username:'default', password:'default', 
+      email:'default'   , phone:'default', 
+      city:'default'    , country:'default', 
+      profileImage: 'assets/21.png')
+    );
 
-  void setUser(String username, String password) {
+  void setUser(User user) {
     state = User(
-      username: username, 
-      password: password,
-      email   : '',
-      phone   : '',
-      city    : '',
-      country : '',
+      username    : user.username, 
+      password    : user.password,
+      email       : user.email,
+      phone       : user.phone,
+      city        : user.city,
+      country     : user.country,
+      profileImage: user.profileImage,
     );
   }
 }

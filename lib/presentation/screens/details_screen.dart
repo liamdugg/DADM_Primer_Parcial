@@ -22,6 +22,7 @@ class DetailsScreen extends ConsumerWidget {
       
       drawer: CustomDrawer(
         userName: ref.read(loggedUserProvider).username,
+        image   : ref.read(loggedUserProvider).profileImage,
       ),
       
       body: PageView(

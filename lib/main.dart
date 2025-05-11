@@ -3,17 +3,33 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:primer_parcial/core/router/app_router.dart';
 import 'package:primer_parcial/core/database/users_database.dart';
 import 'package:primer_parcial/core/theme/app_theme_provider.dart';
+import 'package:primer_parcial/core/database/albums_database.dart';
+//import 'package:primer_parcial/domain/models/album.dart';
+//import 'package:primer_parcial/domain/models/song.dart';
+//import 'package:primer_parcial/domain/models/user.dart';
 
 late UsersDatabase usersDatabase;
+late AlbumsDatabase albumsDatabase;
 
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   usersDatabase = await $FloorUsersDatabase.databaseBuilder('users_database.db').build();
+  albumsDatabase= await $FloorAlbumsDatabase.databaseBuilder('albums_database.db').build();
+  
+  /* Database initialization 
+  for (User user in userList) {
+    await usersDatabase.usersDao.insertUser(user);
+  }
 
-  //for (User user in userList) {
-  //  await usersDatabase.usersDao.insertUser(user);
-  //}
+  for (Album album in albumList) {
+    await albumsDatabase.albumsDao.insertAlbum(album);
+  }
+
+  for (Song song in allSongs) {
+    await albumsDatabase.albumsDao.insertSong(song.title, song.length, song.trackNumber, song.albumId);
+  }
+  */
 
   runApp(
     ProviderScope(

@@ -1,4 +1,3 @@
-
 import 'package:primer_parcial/domain/models/user.dart';
 
 abstract class UsersRepository {

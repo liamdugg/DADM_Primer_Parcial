@@ -1,4 +1,3 @@
-
 import 'package:floor/floor.dart';
 
 @entity
@@ -27,6 +26,7 @@ class User {
   });
 }
 
+/* //used to generate the database elements
 final List<User> userList = List.generate(10, (index) {
   final i = index + 1; // Start from 1
   return User(
@@ -40,3 +40,4 @@ final List<User> userList = List.generate(10, (index) {
     profileImage: 'assets/messi.jpg',
   );
 });
+*/

@@ -46,7 +46,7 @@ final appRouter = GoRouter(
       builder:(context, state) => const ProfileScreen(),
     ),
 
-    // TODO: Solucionar tema nombres de rutas
+    // TODO: fix routes names
     GoRoute(
       path: '/home/edit/add',
       builder: (context, state) => const AddAlbumScreen(),

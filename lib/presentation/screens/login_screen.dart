@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:primer_parcial/domain/models/user.dart';
+import 'package:primer_parcial/data/local_users_repository.dart';
+//import 'package:primer_parcial/domain/models/user.dart';
+//import 'package:primer_parcial/domain/repositories/users_repository.dart';
 import 'package:primer_parcial/presentation/providers/form_field_provider.dart';
 import 'package:primer_parcial/presentation/providers/user_provider.dart';
 
@@ -21,6 +23,7 @@ class LoginScreen extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             
+            // Username Form
             _CustomFormField(
               labelText: 'Username',
               icon: Icon(Icons.person), 
@@ -30,6 +33,7 @@ class LoginScreen extends ConsumerWidget {
 
             const SizedBox(height: 20),
             
+            // Password Form
             _CustomFormField(
               labelText: 'Password',
               icon: Icon(Icons.lock),  
@@ -40,6 +44,7 @@ class LoginScreen extends ConsumerWidget {
             
             const SizedBox(height: 10),
             
+            // Login and Sign Up Buttons
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
               child: Row(
@@ -86,23 +91,25 @@ class LoginScreen extends ConsumerWidget {
     return 'Invalid password';
   }
 
-  void onLoginButtonPressed(BuildContext context, WidgetRef ref) {
+  void onLoginButtonPressed(BuildContext context, WidgetRef ref) async {
+
+    LocalUsersRepository repo = LocalUsersRepository();
     
     if(loginFormKey.currentState!.validate()){
-      final user = userList.firstWhere(
-        (user) => (user.username == userController.text) && (user.password == passController.text),
-        orElse: () => User(id: 0, username:'', password:'', email:'', phone:'', city:'', country:'', profileImage: ''),
-      );
       
-      if (user.username.isNotEmpty && user.password.isNotEmpty){
-        ref.read(loggedUserProvider.notifier).setUser(user);
-        context.go('/home/${user.username}');
-      }
-    
-      else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: const Text('Invalid credentials')),
-        );
+      final user = await repo.authenticateUser(userController.text, passController.text);
+      
+      if(context.mounted) {
+        if (user != null) {
+          ref.read(loggedUserProvider.notifier).setUser(user);
+          context.go('/home/${user.username}');
+        }
+
+        else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: const Text('Invalid credentials')),
+          );
+        }
       }
     }
   }

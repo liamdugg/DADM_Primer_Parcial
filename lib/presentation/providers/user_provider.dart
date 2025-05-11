@@ -7,13 +7,13 @@ class ThemeNotifier extends StateNotifier<User> {
 
   ThemeNotifier() : super(
     User(
-      id: 0, 
-      username:'default', 
-      password:'default', 
-      email:'default', 
-      phone:'default', 
-      city:'default', 
-      country:'default', 
+      id          : 0, 
+      username    :'default', 
+      password    :'default', 
+      email       :'default', 
+      phone       :'default', 
+      city        :'default', 
+      country     :'default', 
       profileImage: 'assets/21.png'
     ),
   );

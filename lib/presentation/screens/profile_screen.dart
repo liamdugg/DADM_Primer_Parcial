@@ -63,6 +63,8 @@ class _UpdateProfileScreen extends ConsumerWidget {
             const SizedBox(height: 10),
 
             Text('Liam Duggan', style: Theme.of(context).textTheme.headlineSmall),
+            const SizedBox(height: 3),
+            Text('Id: ${ref.read(loggedUserProvider).id}', style: Theme.of(context).textTheme.bodyMedium),
             Divider(thickness: 0.5, color: Colors.grey),
 
             // Username

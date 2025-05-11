@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:primer_parcial/domain/album.dart';
+import 'package:primer_parcial/domain/models/album.dart';
 import 'package:primer_parcial/presentation/screens/add_album_screen.dart';
 import 'package:primer_parcial/presentation/screens/home_screen.dart';
 import 'package:primer_parcial/presentation/screens/edit_screen.dart';

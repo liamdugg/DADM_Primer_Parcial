@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:primer_parcial/domain/user.dart';
+import 'package:primer_parcial/domain/models/user.dart';
 import 'package:primer_parcial/presentation/providers/form_field_provider.dart';
 import 'package:primer_parcial/presentation/providers/user_provider.dart';
 
@@ -91,7 +91,7 @@ class LoginScreen extends ConsumerWidget {
     if(loginFormKey.currentState!.validate()){
       final user = userList.firstWhere(
         (user) => (user.username == userController.text) && (user.password == passController.text),
-        orElse: () => User(username:'', password:'', email:'', phone:'', city:'', country:'', profileImage: ''),
+        orElse: () => User(id: 0, username:'', password:'', email:'', phone:'', city:'', country:'', profileImage: ''),
       );
       
       if (user.username.isNotEmpty && user.password.isNotEmpty){

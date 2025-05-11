@@ -1,13 +1,22 @@
+
+import 'package:floor/floor.dart';
+
+@entity
 class User {
-  String username;
-  String password;
-  String email;
-  String phone;
-  String city;
-  String country;
-  String profileImage;
+  
+  @primaryKey
+  final int id;
+  
+  final String username;
+  final String password;
+  final String email;
+  final String phone;
+  final String city;
+  final String country;
+  final String profileImage;
 
   User({
+    required this.id,
     required this.username,
     required this.password,
     required this.email,
@@ -21,6 +30,7 @@ class User {
 final List<User> userList = List.generate(10, (index) {
   final i = index + 1; // Start from 1
   return User(
+    id: i,
     username: 'liam$i',
     password: 'contraseña',
     email   : 'liam$i@gmail.com',

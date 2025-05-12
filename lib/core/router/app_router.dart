@@ -1,33 +1,30 @@
 import 'package:go_router/go_router.dart';
-import 'package:primer_parcial/domain/models/album.dart';
-import 'package:primer_parcial/presentation/screens/add_album_screen.dart';
 import 'package:primer_parcial/presentation/screens/home_screen.dart';
 import 'package:primer_parcial/presentation/screens/edit_screen.dart';
 import 'package:primer_parcial/presentation/screens/login_screen.dart';
 import 'package:primer_parcial/presentation/screens/details_screen.dart';
 import 'package:primer_parcial/presentation/screens/profile_screen.dart';
 import 'package:primer_parcial/presentation/screens/settings_screen.dart';
-
+import 'package:primer_parcial/presentation/screens/add_album_screen.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/home/liam',
+  initialLocation: '/home',
   routes: [
+    
     GoRoute(
       path: '/login',
       builder:(context, state) => LoginScreen(),
     ),
 
     GoRoute(
-      path: '/home/:id',
-      builder:(context, state) => HomeScreen(
-        userName: state.pathParameters['id']!.toString(),
-      ),
+      path: '/home',
+      builder:(context, state) => const HomeScreen(),
     ),
     
     GoRoute(
       path: '/home/details/:id',
       builder:(context, state) {
-        return DetailsScreen(album: albumList.firstWhere((element) => element.title == state.pathParameters['id']!.toString()));
+        return DetailsScreen(albumId: int.tryParse(state.pathParameters['id']!) ?? 0);
       },
     ),
     
@@ -36,19 +33,20 @@ final appRouter = GoRouter(
       builder:(context, state) => const SettingsScreen(),
     ),
     
+    // Album Edit Screen
     GoRoute(
-      path: '/home/editor/:id',
+      path: '/home/details/editor/:id',
       builder:(context, state) => const EditScreen(),
     ),
 
+    // Profile Screen
     GoRoute(
-      path: '/profile/:id',
+      path: '/profile/:user',
       builder:(context, state) => const ProfileScreen(),
     ),
 
-    // TODO: fix routes names
     GoRoute(
-      path: '/home/edit/add',
+      path: '/home/add',
       builder: (context, state) => const AddAlbumScreen(),
     )
   ],

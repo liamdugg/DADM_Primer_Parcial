@@ -1,24 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-//import 'package:primer_parcial/domain/user.dart';
+import 'package:primer_parcial/domain/models/song.dart';
 import 'package:primer_parcial/domain/models/album.dart';
-import 'package:primer_parcial/presentation/providers/user_provider.dart';
+import 'package:primer_parcial/data/local_albums_repository.dart';
 import 'package:primer_parcial/presentation/widgets/custom_drawer.dart';
+import 'package:primer_parcial/presentation/providers/user_provider.dart';
 
-
-class DetailsScreen extends ConsumerWidget {
+class DetailsScreen extends ConsumerStatefulWidget{
   
-  final Album album;
+  final int albumId;
+  const DetailsScreen({super.key, required this.albumId,});
 
-  const DetailsScreen({super.key, required this.album,});
+  @override
+  DetailsScreenState createState() => DetailsScreenState();
+}
+
+class DetailsScreenState extends ConsumerState<DetailsScreen> {
+  
+  final _repository = LocalAlbumsRepository();
+  late Future<Album?> futureAlbum;
+  late Future<List<Song>> futureSongs;
+
+  @override
+  void initState() {
+    super.initState();
+    futureAlbum = _repository.getAlbumById(widget.albumId);
+    futureSongs = _repository.getSongsByAlbumId(widget.albumId);
+  }
   
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       
-      appBar: AppBar(
-        title: const Text('Details'),
-      ),
+      appBar: AppBar(title: const Text('Details'),),
       
       drawer: CustomDrawer(
         userName: ref.read(loggedUserProvider).username,
@@ -27,101 +41,109 @@ class DetailsScreen extends ConsumerWidget {
       
       body: PageView(
         children: [
-          _DetailsView(album: album),
-          _TrackListView(),
-          Center(child: Text('Third Page')),
-        ],
-      ),
-    );
-  }
-}
 
-class _DetailsView extends StatelessWidget {
-  final Album album;
-
-  const _DetailsView({required this.album});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [ 
-          Image.asset(album.cover!),
-          const SizedBox(height: 20),
-
-          Card(
-            elevation: 2,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.album),
-                    Padding(padding: const EdgeInsets.only(right: 10)),
-                    Text('Album: ${album.title}', style: Theme.of(context).textTheme.bodyLarge),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.person),
-                    Padding(padding: const EdgeInsets.only(right: 10)),
-                    Text('Artist: ${album.artist}', style: Theme.of(context).textTheme.bodyLarge),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _TrackListView extends StatelessWidget {
-  //const _TrackListView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Table(
-
-        children: [
-          TableRow(
-            children: [
-              Text('#'),
-              Icon(Icons.music_note),
-              Icon(Icons.timer_outlined),
-            ],
-          ),
-
-          TableRow(
-            children: [
-              Text('1'),
-              Text('Track 1'),
-              Text('3:45'),
-            ],
-          ),
-
-          TableRow(
-            children: [
-              Text('2'),
-              Text('Track 2'),
-              Text('4:20'),
-            ],
-          ),
+          _AlbumDetailsPage(
+            albumId: widget.albumId,
+            futureAlbum: futureAlbum,),
           
-          TableRow(
-            children: [
-              Text('3'),
-              Text('Track 3'),
-              Text('2:50'),
-            ],
+          _TrackListPage(
+            albumId: widget.albumId,
+            futureSongs: futureSongs,
           ),
         ],
       ),
+    );
+  }
+}
+
+class _AlbumDetailsPage extends StatelessWidget {
+  
+  final int albumId;
+  final Future<Album?> futureAlbum;
+
+  const _AlbumDetailsPage({
+    required this.albumId,
+    required this.futureAlbum,
+  });
+ 
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: futureAlbum, 
+      builder: (context, snapshot) {
+
+        // Loading data
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        
+        // Error
+        else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));}
+
+        // Albums loaded
+        else if (snapshot.hasData) {
+          final album = snapshot.data!;
+          debugPrint('--------------\n\n\n LOADED ALBUM \n\n\n--------------');
+          
+          return Column(
+            children: [
+              Image.asset(album.cover!),
+              const SizedBox(height:20),
+              Text(album.title),
+              Text(album.artist),
+              Text(album.releaseYear.toString()),
+            ],
+          );
+        }
+
+        else {return Container(color: Colors.red);}
+
+      }
+    );
+  }
+}
+
+class _TrackListPage extends StatelessWidget {
+  
+  final int albumId;
+  final Future<List<Song>> futureSongs;
+
+  const _TrackListPage({
+    required this.albumId, 
+    required this.futureSongs
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: futureSongs,
+      builder:(context, snapshot) {
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        
+        else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        else if (snapshot.hasData) {
+          final songList = snapshot.data;
+          debugPrint('--------------\n\n\n LOADED TRACKS \n\n\n--------------');
+          return ListView.builder(
+            itemCount: songList!.length,
+            itemBuilder: (context, i) {
+              return ListTile(
+                leading: Text('${songList[i].trackNumber}'),
+                title: Text(songList[i].title),
+                subtitle: Text('Track length: ${songList[i].length}'),
+              );
+            },
+          );
+        }
+        else {return Container(color: Colors.red);} 
+      },
     );
   }
 }

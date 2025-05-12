@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+
 // TODO: fix drawer appearing on back arrow tapped instead of going to previous screen.
 
 class CustomDrawer extends StatelessWidget {
@@ -26,21 +27,21 @@ class CustomDrawer extends StatelessWidget {
           
           _CustomDrawerHeader(
             userName: userName,
-            image: image,
+            image   : image,
           ),
 
           // Home Button
           ListTile(
             leading: const Icon(Icons.home),
-            title: const Text('Home'),
-            onTap: () => currentRoute == '/home/$userName' ? Navigator.of(context).pop() : context.push('/home/$userName'), // close drawer or change screen
+            title  : const Text('Home'),
+            onTap  : () => currentRoute == '/home' ? Navigator.of(context).pop() : context.push('/home'), // close drawer or change screen
           ),
 
           // Settings Button
           ListTile(
             leading: const Icon(Icons.settings),
-            title: const Text('Settings'),
-            onTap:() => currentRoute == '/settings' ? Navigator.of(context).pop() : context.push('/settings'),
+            title  : const Text('Settings'),
+            onTap  : () => currentRoute == '/settings' ? Navigator.of(context).pop() : context.push('/settings'),
           ),
 
           // Profile Button
@@ -52,8 +53,7 @@ class CustomDrawer extends StatelessWidget {
           
           Divider(),
           
-          // Logout Button 
-          // TODO: add a confirmation dialog on tap
+          // Logout Button TODO: add a confirmation dialog on tap
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),

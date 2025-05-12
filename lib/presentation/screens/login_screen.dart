@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:primer_parcial/data/local_users_repository.dart';
-//import 'package:primer_parcial/domain/models/user.dart';
-//import 'package:primer_parcial/domain/repositories/users_repository.dart';
 import 'package:primer_parcial/presentation/providers/form_field_provider.dart';
 import 'package:primer_parcial/presentation/providers/user_provider.dart';
 
@@ -102,7 +100,7 @@ class LoginScreen extends ConsumerWidget {
         if (context.mounted) {
           if (user != null) {
             ref.read(loggedUserProvider.notifier).setUser(user);
-            context.go('/home/${user.username}');
+            context.go('/home');
           }
 
           else {
@@ -122,7 +120,6 @@ class LoginScreen extends ConsumerWidget {
       }
     }
   }
-  
 }
 
 class _CustomFormField extends ConsumerWidget {
@@ -169,55 +166,3 @@ class _CustomFormField extends ConsumerWidget {
     );
   }
 }
-
-/*
-class _CustomFormField extends StatefulWidget {
-  
-  final bool isPassword;
-  final String labelText;
-  final String? Function(String?) validator;
-  final TextEditingController controller;
-  final Icon icon;
-  
-  const _CustomFormField({
-    required this.labelText,
-    required this.validator,
-    required this.controller,
-    required this.icon,
-    this.isPassword = false,
-  });
-
-  @override
-  State<_CustomFormField> createState() => _CustomFormFieldState();
-}
-
-class _CustomFormFieldState extends State<_CustomFormField> {
-  
-  bool toggle = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding( 
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      child: TextFormField(
-        controller : widget.controller,
-        validator  : widget.validator,
-        obscureText: widget.isPassword ? toggle : false,
-        
-        decoration: InputDecoration(
-          labelText: widget.labelText,
-          hintText:  widget.labelText,
-          border: OutlineInputBorder(),
-          prefixIcon: widget.icon,
-          suffixIcon: widget.isPassword 
-            ? IconButton(
-              icon: toggle ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
-              onPressed: () => setState(() {toggle = !toggle;})
-            ) 
-            : null,
-        ),
-      ),
-    );
-  }
-}
-*/

@@ -8,12 +8,7 @@ import 'package:primer_parcial/presentation/widgets/custom_drawer.dart';
 
 class HomeScreen extends ConsumerWidget {
   
-  final String userName;
-  
-  const HomeScreen({
-    super.key,
-    required this.userName
-  });
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,7 +26,7 @@ class HomeScreen extends ConsumerWidget {
       body: _ItemListView(),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push('/home/edit/add'),
+        onPressed: () => context.push('/home/add'),
         child: const Icon(Icons.add),
       ),
 
@@ -143,7 +138,7 @@ class _AlbumView extends StatelessWidget {
         subtitle: Text(album.artist, style: textStyle.bodyMedium),
         trailing: Icon(Icons.arrow_forward),
         
-        onTap: () => context.push('/home/details/${album.title}'),
+        onTap: () => context.push('/home/details/${album.id}'),
       ),
     );
   }

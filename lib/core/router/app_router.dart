@@ -7,7 +7,7 @@ import 'package:primer_parcial/presentation/screens/settings_screen.dart';
 import 'package:primer_parcial/presentation/screens/editor_screen.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/home/add',
+  initialLocation: '/home',
   routes: [
     
     GoRoute(

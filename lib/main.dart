@@ -17,8 +17,8 @@ void main() async {
   usersDatabase  = await $FloorUsersDatabase.databaseBuilder('users_database.db').build();
   albumsDatabase = await $FloorAlbumsDatabase.databaseBuilder('albums_database.db').build();
   
-  /* Database initialization 
-  for (User user in userList) {
+  //Database initialization 
+  /*for (User user in userList) {
     await usersDatabase.usersDao.insertUser(user);
   }
 
@@ -28,8 +28,7 @@ void main() async {
 
   for (Song song in allSongs) {
     await albumsDatabase.albumsDao.insertSong(song.title, song.length, song.trackNumber, song.albumId);
-  }
-  */
+  }*/
 
   runApp(
     ProviderScope(

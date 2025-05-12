@@ -8,7 +8,7 @@ import 'package:primer_parcial/presentation/screens/settings_screen.dart';
 import 'package:primer_parcial/presentation/screens/add_album_screen.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/home',
+  initialLocation: '/home/add',
   routes: [
     
     GoRoute(

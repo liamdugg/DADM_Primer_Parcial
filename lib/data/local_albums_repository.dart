@@ -27,5 +27,20 @@ class LocalAlbumsRepository implements AlbumsRepository {
   Future<void> insertAlbum(Album album) {
     return _albumsDao.insertAlbum(album);
   }
+
+  @override
+  Future<void> updateAlbum(Album album) {
+    return _albumsDao.updateAlbum(album);
+  }
+
+  @override
+  Future<int?> getAlbumCount(){
+    return _albumsDao.getAlbumCount();
+  }
+  
+  @override
+  Future<void> insertSong(String title, String length, int trackNumber, int albumId) {
+    return _albumsDao.insertSong(title, length, trackNumber, albumId);
+  }
   
 }

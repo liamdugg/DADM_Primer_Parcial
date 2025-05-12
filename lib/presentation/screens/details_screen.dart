@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:primer_parcial/domain/models/song.dart';
 import 'package:primer_parcial/domain/models/album.dart';
 import 'package:primer_parcial/data/local_albums_repository.dart';
@@ -32,13 +33,22 @@ class DetailsScreenState extends ConsumerState<DetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       
-      appBar: AppBar(title: const Text('Details'),),
+      appBar: AppBar(
+        title: const Text('Details'),
+        actions: [ 
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () => context.push('/home/add')
+          ),
+        ],
+      ),
       
       drawer: CustomDrawer(
         userName: ref.read(loggedUserProvider).username,
         image   : ref.read(loggedUserProvider).profileImage,
       ),
-      
+
+
       body: PageView(
         children: [
 
@@ -84,16 +94,20 @@ class _AlbumDetailsPage extends StatelessWidget {
         // Albums loaded
         else if (snapshot.hasData) {
           final album = snapshot.data!;
-          debugPrint('--------------\n\n\n LOADED ALBUM \n\n\n--------------');
           
-          return Column(
-            children: [
-              Image.asset(album.cover!),
-              const SizedBox(height:20),
-              Text(album.title),
-              Text(album.artist),
-              Text(album.releaseYear.toString()),
-            ],
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                (album.cover == null ||  album.cover!.isEmpty)
+                    ? Image.asset('assets/messi.jpg', fit: BoxFit.cover)
+                    : Image.asset(album.cover!, fit: BoxFit.cover),
+                const SizedBox(height:20),
+                Text(album.title),
+                Text(album.artist),
+                Text(album.releaseYear.toString()),
+              ],
+            ),
           );
         }
 

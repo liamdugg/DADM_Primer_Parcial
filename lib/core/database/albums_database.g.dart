@@ -127,6 +127,17 @@ class _$AlbumsDao extends AlbumsDao {
                   'releaseYear': item.releaseYear,
                   'cover': item.cover
                 }),
+        _albumUpdateAdapter = UpdateAdapter(
+            database,
+            'Album',
+            ['id'],
+            (Album item) => <String, Object?>{
+                  'id': item.id,
+                  'title': item.title,
+                  'artist': item.artist,
+                  'releaseYear': item.releaseYear,
+                  'cover': item.cover
+                }),
         _albumDeletionAdapter = DeletionAdapter(
             database,
             'Album',
@@ -146,6 +157,8 @@ class _$AlbumsDao extends AlbumsDao {
   final QueryAdapter _queryAdapter;
 
   final InsertionAdapter<Album> _albumInsertionAdapter;
+
+  final UpdateAdapter<Album> _albumUpdateAdapter;
 
   final DeletionAdapter<Album> _albumDeletionAdapter;
 
@@ -197,8 +210,19 @@ class _$AlbumsDao extends AlbumsDao {
   }
 
   @override
+  Future<int?> getAlbumCount() async {
+    return _queryAdapter.query('SELECT COUNT(*) FROM Album',
+        mapper: (Map<String, Object?> row) => row.values.first as int);
+  }
+
+  @override
   Future<void> insertAlbum(Album album) async {
     await _albumInsertionAdapter.insert(album, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> updateAlbum(Album album) async {
+    await _albumUpdateAdapter.update(album, OnConflictStrategy.replace);
   }
 
   @override

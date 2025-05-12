@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:primer_parcial/data/local_albums_repository.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:primer_parcial/domain/models/album.dart';
-import 'package:primer_parcial/presentation/providers/user_provider.dart';
+import 'package:primer_parcial/data/local_albums_repository.dart';
 import 'package:primer_parcial/presentation/widgets/custom_drawer.dart';
+import 'package:primer_parcial/presentation/providers/user_provider.dart';
+import 'package:primer_parcial/presentation/providers/album_provider.dart';
 
 class HomeScreen extends ConsumerWidget {
   
@@ -26,7 +27,10 @@ class HomeScreen extends ConsumerWidget {
       body: _ItemListView(),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push('/home/add'),
+        onPressed: () {
+          ref.read(albumProvider.notifier).newAlbum();
+          context.push('/home/add');
+        },
         child: const Icon(Icons.add),
       ),
 
@@ -49,14 +53,12 @@ class _ItemListViewState extends State<_ItemListView> {
   void initState() {
     super.initState();
     _futureAlbums = _repository.getAlbums();
-    debugPrint('--------------\nFuture: $_futureAlbums\n--------------');
   }
   
   Future<void> _refreshAlbums() async {
     setState(() {
       _futureAlbums = _repository.getAlbums();
     });
-    debugPrint('--------------\nFuture: $_futureAlbums\n--------------');
   }
 
   @override
@@ -115,14 +117,14 @@ class _AlbumList extends StatelessWidget {
   }
 }
 
-class _AlbumView extends StatelessWidget {
+class _AlbumView extends ConsumerWidget {
 
   final Album album;
 
   const _AlbumView({required this.album});
   
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final textStyle = Theme.of(context).textTheme;
 
     return Card(
@@ -131,14 +133,19 @@ class _AlbumView extends StatelessWidget {
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: SizedBox(width: 60, height: 60,
-            child: Image.asset(album.cover!, fit: BoxFit.cover,),
+            child: (album.cover == null ||  album.cover!.isEmpty)
+                ? Image.asset('assets/messi.jpg', fit: BoxFit.cover)
+                : Image.asset(album.cover!, fit: BoxFit.cover),
           ),
         ),
         title: Text(album.title, style: textStyle.titleMedium,),
         subtitle: Text(album.artist, style: textStyle.bodyMedium),
         trailing: Icon(Icons.arrow_forward),
         
-        onTap: () => context.push('/home/details/${album.id}'),
+        onTap: (){
+          ref.read(albumProvider.notifier).copyAlbum(album); 
+          context.push('/home/details/${album.id}');
+        },
       ),
     );
   }

@@ -9,4 +9,10 @@ abstract class AlbumsRepository {
   Future<List<Song>> getSongsByAlbumId(int albumId);
 
   Future<void> insertAlbum(Album album);
+
+  Future<void> updateAlbum(Album album);
+
+  Future<int?> getAlbumCount();
+
+  Future<void> insertSong(String title, String length, int trackNumber, int albumId);
 }

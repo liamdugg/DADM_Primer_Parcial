@@ -29,7 +29,7 @@ class HomeScreen extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           ref.read(albumProvider.notifier).newAlbum();
-          context.push('/home/add');
+          context.push('/home/editor');
         },
         child: const Icon(Icons.add),
       ),

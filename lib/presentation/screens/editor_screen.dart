@@ -9,8 +9,8 @@ import 'package:primer_parcial/presentation/widgets/custom_drawer.dart';
 import 'package:primer_parcial/presentation/providers/user_provider.dart';
 import 'package:primer_parcial/presentation/providers/album_provider.dart';
 
-class AddAlbumScreen extends ConsumerWidget {
-  const AddAlbumScreen({super.key});
+class EditorScreen extends ConsumerWidget {
+  const EditorScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -154,7 +154,7 @@ class _EditFormView extends ConsumerWidget {
         }
       }
 
-      if(context.mounted) context.go('/home');
+      if(context.mounted) context.go('/home/details/${album.id}');
     }
 
     else {}

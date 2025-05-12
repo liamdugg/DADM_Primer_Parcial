@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:primer_parcial/data/local_albums_repository.dart';
 import 'package:primer_parcial/domain/models/album.dart';
 import 'package:primer_parcial/presentation/providers/user_provider.dart';
 import 'package:primer_parcial/presentation/widgets/custom_drawer.dart';
@@ -38,26 +39,92 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-class _ItemListView extends StatelessWidget {
+class _ItemListView extends StatefulWidget {
   
   @override
+  State<_ItemListView> createState() => _ItemListViewState();
+}
+
+class _ItemListViewState extends State<_ItemListView> {
+  
+  final _repository= LocalAlbumsRepository();
+  late Future<List<Album>> _futureAlbums;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureAlbums = _repository.getAlbums();
+    debugPrint('--------------\nFuture: $_futureAlbums\n--------------');
+  }
+  
+  Future<void> _refreshAlbums() async {
+    setState(() {
+      _futureAlbums = _repository.getAlbums();
+    });
+    debugPrint('--------------\nFuture: $_futureAlbums\n--------------');
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: albumList.length,
-      itemBuilder: (context, index){
-        return _ItemView(
-          album: albumList[index],
-        );
+    return FutureBuilder(
+      future: _futureAlbums, 
+      builder: (context, snapshot) {
+
+        // Loading data
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        
+        // Error
+        else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        // Albums loaded
+        else if (snapshot.hasData) {
+          final albumList = snapshot.data!;
+
+          return _AlbumList(
+            albumList: albumList,
+            onRefresh: _refreshAlbums,
+          );
+        }
+
+        else {return Container(color: Colors.red);}
       }
+    ); 
+  }
+}
+
+class _AlbumList extends StatelessWidget {
+  
+  final Function onRefresh;
+  final List<Album> albumList;
+
+  const _AlbumList({
+    required this.onRefresh, 
+    required this.albumList
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: () async => onRefresh(),
+      child: ListView.builder(
+        itemCount: albumList.length,
+        itemBuilder: (context, index){
+          return _AlbumView(album: albumList[index],);
+        }
+      ),
     );
   }
 }
 
-class _ItemView extends StatelessWidget {
+class _AlbumView extends StatelessWidget {
 
   final Album album;
 
-  const _ItemView({required this.album});
+  const _AlbumView({required this.album});
   
   @override
   Widget build(BuildContext context) {

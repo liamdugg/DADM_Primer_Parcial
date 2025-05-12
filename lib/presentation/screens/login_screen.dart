@@ -94,25 +94,35 @@ class LoginScreen extends ConsumerWidget {
   void onLoginButtonPressed(BuildContext context, WidgetRef ref) async {
 
     LocalUsersRepository repo = LocalUsersRepository();
-    
-    if(loginFormKey.currentState!.validate()){
-      
-      final user = await repo.authenticateUser(userController.text, passController.text);
-      
-      if(context.mounted) {
-        if (user != null) {
-          ref.read(loggedUserProvider.notifier).setUser(user);
-          context.go('/home/${user.username}');
-        }
 
-        else {
+    if(loginFormKey.currentState!.validate()){
+      try {
+        final user = await repo.authenticateUser(userController.text, passController.text);
+
+        if (context.mounted) {
+          if (user != null) {
+            ref.read(loggedUserProvider.notifier).setUser(user);
+            context.go('/home/${user.username}');
+          }
+
+          else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: const Text('Invalid credentials')),
+            );
+          } 
+        }
+      }
+
+      catch (e) {
+        if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: const Text('Invalid credentials')),
+            SnackBar(content: Text('Error: $e')),
           );
         }
       }
     }
   }
+  
 }
 
 class _CustomFormField extends ConsumerWidget {

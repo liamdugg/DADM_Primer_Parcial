@@ -14,8 +14,8 @@ late AlbumsDatabase albumsDatabase;
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
-  usersDatabase = await $FloorUsersDatabase.databaseBuilder('users_database.db').build();
-  albumsDatabase= await $FloorAlbumsDatabase.databaseBuilder('albums_database.db').build();
+  usersDatabase  = await $FloorUsersDatabase.databaseBuilder('users_database.db').build();
+  albumsDatabase = await $FloorAlbumsDatabase.databaseBuilder('albums_database.db').build();
   
   /* Database initialization 
   for (User user in userList) {

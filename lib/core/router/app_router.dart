@@ -21,7 +21,7 @@ final appRouter = GoRouter(
     ),
     
     GoRoute(
-      path: '/home/details/:id',
+      path: '/details/:id',
       builder:(context, state) {
         return DetailsScreen(albumId: int.tryParse(state.pathParameters['id']!) ?? 0);
       },
@@ -32,14 +32,13 @@ final appRouter = GoRouter(
       builder:(context, state) => const SettingsScreen(),
     ),
     
-
     GoRoute(
       path: '/profile/:user',
       builder:(context, state) => const ProfileScreen(),
     ),
 
     GoRoute(
-      path: '/home/editor',
+      path: '/editor',
       builder: (context, state) => const EditorScreen(),
     )
   ],

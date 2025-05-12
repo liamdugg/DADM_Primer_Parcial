@@ -38,7 +38,7 @@ class DetailsScreenState extends ConsumerState<DetailsScreen> {
         actions: [ 
           IconButton(
             icon: const Icon(Icons.edit),
-            onPressed: () => context.push('/home/editor')
+            onPressed: () => context.push('/editor')
           ),
         ],
       ),

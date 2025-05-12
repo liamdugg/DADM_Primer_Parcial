@@ -154,7 +154,13 @@ class _EditFormView extends ConsumerWidget {
         }
       }
 
-      if(context.mounted) context.go('/home/details/${album.id}');
+      // TODO: check wether this can be implemented using go instead of pushing
+      
+      if(context.mounted) {
+        debugPrint('--------------\n\n\n GOING BACK TO DETAILS \n /details/${album.id}\n\n\n--------------');
+        context.go('/home');
+        context.push('/details/${album.id}');
+      }
     }
 
     else {}

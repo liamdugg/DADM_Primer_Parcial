@@ -29,7 +29,7 @@ class HomeScreen extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           ref.read(albumProvider.notifier).newAlbum();
-          context.push('/home/editor');
+          context.push('/editor');
         },
         child: const Icon(Icons.add),
       ),
@@ -144,7 +144,7 @@ class _AlbumView extends ConsumerWidget {
         
         onTap: (){
           ref.read(albumProvider.notifier).copyAlbum(album); 
-          context.push('/home/details/${album.id}');
+          context.push('/details/${album.id}');
         },
       ),
     );

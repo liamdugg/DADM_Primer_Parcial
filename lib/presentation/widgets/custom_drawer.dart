@@ -19,7 +19,7 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final String currentRoute = GoRouterState.of(context).uri.toString();
-    debugPrint(currentRoute);
+    //debugPrint(currentRoute);
 
     return Drawer(
       child: ListView(
@@ -34,21 +34,45 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.home),
             title  : const Text('Home'),
-            onTap  : () => currentRoute == '/home' ? Navigator.of(context).pop() : context.push('/home'), // close drawer or change screen
+            onTap  : () { 
+              if(currentRoute == '/home') {
+                context.pop(); // remove drawer from navigation stack
+              }
+              else {
+                context.pop();
+                context.push('/home');
+              } 
+            }
           ),
 
           // Settings Button
           ListTile(
             leading: const Icon(Icons.settings),
             title  : const Text('Settings'),
-            onTap  : () => currentRoute == '/settings' ? Navigator.of(context).pop() : context.push('/settings'),
+            onTap  : () { 
+              if(currentRoute == '/settings') {
+                context.pop(); // remove drawer from navigation stack
+              }
+              else {
+                context.pop();
+                context.push('/settings');
+              } 
+            }
           ),
 
           // Profile Button
           ListTile(
             leading: const Icon(Icons.person),
             title: const Text('Profile'),
-            onTap:() => currentRoute == '/profile/$userName' ? Navigator.of(context).pop() : context.push('/profile/$userName'),
+            onTap:() { 
+              if(currentRoute == '/profile/$userName') {
+                context.pop(); // remove drawer from navigation stack
+              }
+              else {
+                context.pop();
+                context.push('/profile/$userName');
+              } 
+            }
           ),
           
           Divider(),

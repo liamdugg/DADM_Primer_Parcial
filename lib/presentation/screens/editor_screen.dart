@@ -128,21 +128,24 @@ class _EditFormView extends ConsumerWidget {
 
     if(editFormKey.currentState!.validate()){
       
-<<<<<<< HEAD
-=======
       int? count = 0;
->>>>>>> working_branch
       Album album = ref.read(albumProvider);
-
+      final repository = LocalAlbumsRepository();
       
       if(album.id == 0) {
-        await addNewAlbum(album, ref);
+        try{
+          count = await getAlbumCount() ?? 0;
+          album = updateProvider(count+1, ref);
+          await repository.insertAlbum(album);
+          await insertNewAlbumSongs(album.id);
+        } 
+    
+        catch(e){
+          debugPrint('\n\n\nError getting album count: $e\n\n\n');
+        }
       }
 
       else if (album.id > 0){
-<<<<<<< HEAD
-        await updateAlbum(album, ref);
-=======
         if(isAlbumChanged(album)){
           try{
             album = updateProvider(album.id, ref);
@@ -152,7 +155,6 @@ class _EditFormView extends ConsumerWidget {
           }
         }
         else {}
->>>>>>> working_branch
       }
       
       if(context.mounted) {
@@ -160,26 +162,6 @@ class _EditFormView extends ConsumerWidget {
         context.push('/details/${album.id}');
       }
     }
-<<<<<<< HEAD
-  }
-
-  Future<void> updateAlbum(Album album, WidgetRef ref) async {
-    
-    final repository = LocalAlbumsRepository();
-    
-    if(isAlbumChanged(album)){
-      
-      try{
-        album = updateProvider(album.id, ref);
-        await repository.updateAlbum(album);
-      } 
-      
-      catch(e){
-        debugPrint('Error updating album: $e');
-      }
-    }
- 
-=======
     else {}
   }
 
@@ -226,24 +208,6 @@ class _EditFormView extends ConsumerWidget {
     );
 
     return ref.read(albumProvider);
->>>>>>> working_branch
-  }
-
-  Future<void> addNewAlbum(Album album, WidgetRef ref) async {
-    
-    int count = 0;
-    final repository = LocalAlbumsRepository();
-
-    try{
-      count = await getAlbumCount() ?? 0;
-      album = updateProvider(count+1, ref);
-      await repository.insertAlbum(album);
-      await insertNewAlbumSongs(album.id);
-    } 
-    
-    catch(e){
-      debugPrint('\n\n\nError getting album count: $e\n\n\n');
-    }
   }
 
   Future<void> insertNewAlbumSongs(int id) async {
@@ -267,33 +231,7 @@ class _EditFormView extends ConsumerWidget {
   Future<int?> getAlbumCount() async {
     return albumsDatabase.albumsDao.getAlbumCount();
   }
-
-  Album updateProvider(int id, WidgetRef ref) {
-    final album = ref.read(albumProvider);
-    ref.read(albumProvider.notifier).copyAlbum(
-        Album(
-          id          : id,
-          title       : nameController.text,
-          artist      : artistController.text,
-          releaseYear : int.tryParse(yearController.text) ?? 1900,
-          cover: album.cover,
-        )
-    );
-
-    return ref.read(albumProvider);
-  }
-
-  bool isAlbumChanged(Album album){
-    
-    if(album.title == nameController.text    && 
-       album.artist == artistController.text &&
-       album.releaseYear.toString() == yearController.text 
-    ){
-      return false;
-    }
-
-    return true;
-  } 
+  
 }
 
 class _EditFormField extends StatelessWidget {

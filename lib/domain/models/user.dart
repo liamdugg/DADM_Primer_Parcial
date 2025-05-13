@@ -26,6 +26,7 @@ class User {
   });
 }
 
+/*
 //used to generate the database elements
 final List<User> userList = List.generate(10, (index) {
   final i = index + 1; // Start from 1
@@ -40,3 +41,4 @@ final List<User> userList = List.generate(10, (index) {
     profileImage: 'assets/messi.jpg',
   );
 });
+*/

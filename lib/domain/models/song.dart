@@ -20,6 +20,7 @@ class Song {
   });
 }
 
+/*
 final List<Song> allSongs = [
 
   // The Dark Side of the Moon
@@ -141,3 +142,4 @@ final List<Song> allSongs = [
   Song(id: 98, title: "I'm Old Fashioned", length: "7:57", trackNumber: 4, albumId: 10),
   Song(id: 99, title: "Lazy Bird", length: "7:07", trackNumber: 5, albumId: 10),
 ];
+*/

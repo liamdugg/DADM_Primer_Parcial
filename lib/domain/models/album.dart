@@ -20,6 +20,7 @@ class Album {
   });
 }
 
+/*
 final List<Album> albumList = [
   Album(
     id: 1,
@@ -97,3 +98,4 @@ final List<Album> albumList = [
   ),
 
 ];
+*/

@@ -81,7 +81,7 @@ class _ItemListViewState extends State<_ItemListView> {
         else if (snapshot.hasData) {
           final albumList = snapshot.data!;
 
-          return _AlbumList(
+          return _AlbumListView(
             albumList: albumList,
             onRefresh: _refreshAlbums,
           );
@@ -93,12 +93,12 @@ class _ItemListViewState extends State<_ItemListView> {
   }
 }
 
-class _AlbumList extends StatelessWidget {
+class _AlbumListView extends StatelessWidget {
   
   final Function onRefresh;
   final List<Album> albumList;
 
-  const _AlbumList({
+  const _AlbumListView({
     required this.onRefresh, 
     required this.albumList
   });
@@ -133,7 +133,7 @@ class _AlbumView extends ConsumerWidget {
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: SizedBox(width: 60, height: 60,
-            child: (album.cover == null ||  album.cover!.isEmpty)
+            child: (album.cover == null || album.cover == '')
                 ? Image.asset('assets/messi.jpg', fit: BoxFit.cover)
                 : Image.asset(album.cover!, fit: BoxFit.cover),
           ),

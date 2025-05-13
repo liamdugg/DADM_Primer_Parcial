@@ -7,16 +7,16 @@ import 'package:primer_parcial/data/local_albums_repository.dart';
 import 'package:primer_parcial/presentation/widgets/custom_drawer.dart';
 import 'package:primer_parcial/presentation/providers/user_provider.dart';
 
-class DetailsScreen extends ConsumerStatefulWidget{
+class AlbumScreen extends ConsumerStatefulWidget{
   
   final int albumId;
-  const DetailsScreen({super.key, required this.albumId,});
+  const AlbumScreen({super.key, required this.albumId,});
 
   @override
-  DetailsScreenState createState() => DetailsScreenState();
+  AlbumScreenState createState() => AlbumScreenState();
 }
 
-class DetailsScreenState extends ConsumerState<DetailsScreen> {
+class AlbumScreenState extends ConsumerState<AlbumScreen> {
   
   final _repository = LocalAlbumsRepository();
   late Future<Album?> futureAlbum;
@@ -98,10 +98,10 @@ class _AlbumDetailsPage extends StatelessWidget {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                (album.cover == null ||  album.cover!.isEmpty)
-                    ? Image.asset('assets/messi.jpg', fit: BoxFit.cover)
-                    : Image.asset(album.cover!, fit: BoxFit.cover),
+              children: [ 
+                (album.cover == null || album.cover == '')
+                  ? Image.asset('assets/messi.jpg', fit: BoxFit.cover)
+                  : Image.asset(album.cover!, fit: BoxFit.cover),
                 const SizedBox(height:20),
                 Text(album.title),
                 Text(album.artist),

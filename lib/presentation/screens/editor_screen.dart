@@ -128,33 +128,16 @@ class _EditFormView extends ConsumerWidget {
     
     if(editFormKey.currentState!.validate()){
       
-      // TODO: make this function cleaner
-
-      int? count = 0;
       Album album = ref.read(albumProvider);
-      final repository = LocalAlbumsRepository();
+
       
       if(album.id == 0) {
-        try{
-          count = await getAlbumCount() ?? 0;
-          album = updateProvider(count+1, ref);
-          await repository.insertAlbum(album);
-          await insertNewAlbumSongs(album.id);
-        } catch(e){
-          debugPrint('Error getting album count: $e');
-        }
+        await addNewAlbum(album, ref);
       }
 
       else if (album.id > 0){
-        try{
-          album = updateProvider(album.id, ref);
-          await repository.updateAlbum(album);
-        } catch(e){
-          debugPrint('Error updating album: $e');
-        }
+        await updateAlbum(album, ref);
       }
-
-      // TODO: check wether this can be implemented using go instead of pushing
       
       if(context.mounted) {
         debugPrint('--------------\n\n\n GOING BACK TO DETAILS \n /details/${album.id}\n\n\n--------------');
@@ -162,27 +145,41 @@ class _EditFormView extends ConsumerWidget {
         context.push('/details/${album.id}');
       }
     }
-
-    else {}
   }
 
-  Album updateProvider(int id, WidgetRef ref) {
-    final album = ref.read(albumProvider);
-    ref.read(albumProvider.notifier).copyAlbum(
-        Album(
-          id          : id,
-          title       : nameController.text,
-          artist      : artistController.text,
-          releaseYear : int.tryParse(yearController.text) ?? 1900,
-          cover: album.cover,
-        )
-    );
-
-    return ref.read(albumProvider);
+  Future<void> updateAlbum(Album album, WidgetRef ref) async {
+    
+    final repository = LocalAlbumsRepository();
+    
+    if(isAlbumChanged(album)){
+      
+      try{
+        album = updateProvider(album.id, ref);
+        await repository.updateAlbum(album);
+      } 
+      
+      catch(e){
+        debugPrint('Error updating album: $e');
+      }
+    }
+ 
   }
 
-  Future<int?> getAlbumCount() async {
-    return albumsDatabase.albumsDao.getAlbumCount();
+  Future<void> addNewAlbum(Album album, WidgetRef ref) async {
+    
+    int count = 0;
+    final repository = LocalAlbumsRepository();
+
+    try{
+      count = await getAlbumCount() ?? 0;
+      album = updateProvider(count+1, ref);
+      await repository.insertAlbum(album);
+      await insertNewAlbumSongs(album.id);
+    } 
+    
+    catch(e){
+      debugPrint('\n\n\nError getting album count: $e\n\n\n');
+    }
   }
 
   Future<void> insertNewAlbumSongs(int id) async {
@@ -202,6 +199,37 @@ class _EditFormView extends ConsumerWidget {
       await repository.insertSong(song.title, song.length, song.trackNumber, song.albumId);
     }
   }
+  
+  Future<int?> getAlbumCount() async {
+    return albumsDatabase.albumsDao.getAlbumCount();
+  }
+
+  Album updateProvider(int id, WidgetRef ref) {
+    final album = ref.read(albumProvider);
+    ref.read(albumProvider.notifier).copyAlbum(
+        Album(
+          id          : id,
+          title       : nameController.text,
+          artist      : artistController.text,
+          releaseYear : int.tryParse(yearController.text) ?? 1900,
+          cover: album.cover,
+        )
+    );
+
+    return ref.read(albumProvider);
+  }
+
+  bool isAlbumChanged(Album album){
+    
+    if(album.title == nameController.text    && 
+       album.artist == artistController.text &&
+       album.releaseYear.toString() == yearController.text 
+    ){
+      return false;
+    }
+
+    return true;
+  } 
 }
 
 class _EditFormField extends StatelessWidget {

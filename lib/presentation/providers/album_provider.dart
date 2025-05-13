@@ -6,7 +6,7 @@ final albumProvider = StateNotifierProvider<ThemeNotifier, Album>((ref) => Theme
 class ThemeNotifier extends StateNotifier<Album> {
 
   ThemeNotifier() : super(
-    Album(id: 0, title: '', artist: '', releaseYear: 0, cover: ''),
+    Album(id: 0, title: '', artist: '', releaseYear: 0, cover: null),
   );
 
   void copyAlbum(Album album) {
@@ -25,7 +25,7 @@ class ThemeNotifier extends StateNotifier<Album> {
       title: 'new',
       artist: 'new',
       releaseYear: 1920,
-      cover: '',
+      cover: null,
     );
   }
 }

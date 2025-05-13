@@ -10,7 +10,6 @@ abstract class UsersDao {
   @Query('SELECT * FROM User WHERE id = :id')
   Future<User?> findUserById(int id);
 
-  // TODO: Look for a better way to do this and avoid using plaint text passwords
   @Query('SELECT * FROM User WHERE username = :username AND password = :password')
   Future<User?> authenticateUser(String username, String password);
 

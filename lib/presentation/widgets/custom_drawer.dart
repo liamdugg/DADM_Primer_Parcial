@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-
-// TODO: fix drawer appearing on back arrow tapped instead of going to previous screen.
-
 class CustomDrawer extends StatelessWidget {
   
   final String userName;
@@ -19,7 +16,6 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final String currentRoute = GoRouterState.of(context).uri.toString();
-    //debugPrint(currentRoute);
 
     return Drawer(
       child: ListView(

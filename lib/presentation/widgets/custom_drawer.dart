@@ -77,11 +77,34 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),
-            onTap: () => context.go('/login'),
+            onTap: () => openDialog(context),
           ),
 
       ],),
-    );
+    ); 
+  }
+
+  openDialog(BuildContext context) {
+      showDialog(
+       context: context,
+       builder: (context) => 
+        AlertDialog(
+          title: Text('Logout Confirmation'),
+          content: Text('Are you sure you want to logout?'),
+          actions: [
+
+            TextButton(
+              onPressed: () => context.pop(), 
+              child: Text('Cancel')
+            ),
+
+            FilledButton(
+              onPressed: () => context.go('/login'), 
+              child: Text('Logout')
+            ),
+          ],
+        )
+      );
   }
 }
 

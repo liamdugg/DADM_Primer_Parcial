@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-
-// TODO: fix drawer appearing on back arrow tapped instead of going to previous screen.
-
 class CustomDrawer extends StatelessWidget {
   
   final String userName;
@@ -19,7 +16,6 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final String currentRoute = GoRouterState.of(context).uri.toString();
-    //debugPrint(currentRoute);
 
     return Drawer(
       child: ListView(
@@ -81,11 +77,34 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),
-            onTap: () => context.go('/login'),
+            onTap: () => openDialog(context),
           ),
 
       ],),
-    );
+    ); 
+  }
+
+  openDialog(BuildContext context) {
+      showDialog(
+       context: context,
+       builder: (context) => 
+        AlertDialog(
+          title: Text('Logout Confirmation'),
+          content: Text('Are you sure you want to logout?'),
+          actions: [
+
+            TextButton(
+              onPressed: () => context.pop(), 
+              child: Text('Cancel')
+            ),
+
+            FilledButton(
+              onPressed: () => context.go('/login'), 
+              child: Text('Logout')
+            ),
+          ],
+        )
+      );
   }
 }
 

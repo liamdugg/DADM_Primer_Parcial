@@ -80,7 +80,7 @@ class _EditFormView extends ConsumerWidget {
           SizedBox(height: 20),
 
           ElevatedButton(
-            onPressed: () => saveChanges(context, ref), 
+            onPressed: () async => saveChanges(context, ref), 
             child: const Text('Save changes')
           ),
 
@@ -125,9 +125,13 @@ class _EditFormView extends ConsumerWidget {
   }
 
   void saveChanges(BuildContext context, WidgetRef ref) async {
-    
+
     if(editFormKey.currentState!.validate()){
       
+<<<<<<< HEAD
+=======
+      int? count = 0;
+>>>>>>> working_branch
       Album album = ref.read(albumProvider);
 
       
@@ -136,15 +140,27 @@ class _EditFormView extends ConsumerWidget {
       }
 
       else if (album.id > 0){
+<<<<<<< HEAD
         await updateAlbum(album, ref);
+=======
+        if(isAlbumChanged(album)){
+          try{
+            album = updateProvider(album.id, ref);
+            await repository.updateAlbum(album);
+          } catch(e){
+            debugPrint('Error updating album: $e');
+          }
+        }
+        else {}
+>>>>>>> working_branch
       }
       
       if(context.mounted) {
-        debugPrint('--------------\n\n\n GOING BACK TO DETAILS \n /details/${album.id}\n\n\n--------------');
         context.go('/home');
         context.push('/details/${album.id}');
       }
     }
+<<<<<<< HEAD
   }
 
   Future<void> updateAlbum(Album album, WidgetRef ref) async {
@@ -163,6 +179,54 @@ class _EditFormView extends ConsumerWidget {
       }
     }
  
+=======
+    else {}
+  }
+
+  bool isAlbumChanged(Album album){
+    
+    if(album.title == nameController.text    && 
+       album.artist == artistController.text &&
+       album.releaseYear.toString() == yearController.text 
+    ){
+      return false;
+    }
+
+    return true;
+  } 
+
+  // IF I USE THIS FUNCTION THE ALBUM PAGE WONT WORK. DONT KNOW WHY
+  Future<void> addNewAlbum(Album album, WidgetRef ref) async {
+    
+    int count = 0;
+    final repository = LocalAlbumsRepository();
+
+    try{
+      count = await getAlbumCount() ?? 0;
+      album = updateProvider(count+1, ref);
+      await repository.insertAlbum(album);
+      await insertNewAlbumSongs(album.id);
+    } 
+    
+    catch(e){
+      debugPrint('\n\n\nError getting album count: $e\n\n\n');
+    }
+  }
+  
+  Album updateProvider(int id, WidgetRef ref) {
+    final album = ref.read(albumProvider);
+    ref.read(albumProvider.notifier).copyAlbum(
+        Album(
+          id          : id,
+          title       : nameController.text,
+          artist      : artistController.text,
+          releaseYear : int.tryParse(yearController.text) ?? 1900,
+          cover: album.cover,
+        )
+    );
+
+    return ref.read(albumProvider);
+>>>>>>> working_branch
   }
 
   Future<void> addNewAlbum(Album album, WidgetRef ref) async {
